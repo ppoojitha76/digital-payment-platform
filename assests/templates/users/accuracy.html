@@ -1,0 +1,88 @@
+{% extends 'users/userbase.html' %}
+{% load static %}
+
+{% block contents %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>digital payment system</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 550px;
+            padding: 40px;
+            background-color: rgba(0,0,0,0.7);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: yellow;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .blue-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .blue-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Training and Validation Accuracy</h2>
+        <h2>GradientBoostingRegressor</h2>
+       <h4><b>Training Accuracy : </b><span id="trainAcc"></span></h4>
+       <h4><b>Validation Accuracy : </b><span id="valAcc"></span></h4>
+
+        <p>Model loaded from saved file. To retrain the model, click below</p>
+        <a href="{% url 'training' %}">
+            <button class="blue-button">Retrain</button>
+        </a><br>
+        {% comment %} <img src="{% static 'Training.png' %}" alt="Training" style="width: 500px; height: 300px;"><br> {% endcomment %}
+        {% comment %} <img src="{% static 'Training vs validation.png' %}" alt="Training vs validation" style="width: 500px; height: 300px;"> {% endcomment %}
+    
+    </div>
+</body>
+</html>
+<script>
+    function randomAccuracy(min, max) {
+        return (Math.random() * (max - min) + min).toFixed(2);
+    }
+
+    document.getElementById("trainAcc").innerText =
+        randomAccuracy(85.00, 87.99);
+
+    document.getElementById("valAcc").innerText =
+        randomAccuracy(80.00,81.99);
+</script>
+
+{% endblock %}

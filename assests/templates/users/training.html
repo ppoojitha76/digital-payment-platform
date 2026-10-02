@@ -1,0 +1,21 @@
+{% extends 'users/userbase.html' %}
+{% load static %}
+
+{% block contents %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Results</title>
+</head>
+<body>
+    <h1>Training Results</h1>
+    <p><strong> Mean Absolute Error (MAE):</strong> {{ mae}}</p>
+    <p><strong>Mean Squared Error (MSE):</strong> {{ mse  }}</p>
+    <p><strong>r2:</strong> {{ r2  }}</p>
+</body>
+</html>
+
+{% endblock %}

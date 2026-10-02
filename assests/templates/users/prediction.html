@@ -1,0 +1,241 @@
+{% extends 'users/userbase.html' %}
+{% load static %}
+
+{% block contents %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Satisfaction Prediction</title>
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff; /* White background */
+        }
+
+        .card {
+            background: #ffffff; /* Pure white card for brighter look */
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 123, 255, 0.15); /* Softer blue border */
+            animation: fadeInCard 0.8s ease-out;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #222222;
+            background: linear-gradient(45deg, #007bff, #ff4d4d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9; /* Slightly off-white for inputs */
+            color: #333333;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]::placeholder {
+            color: #888888;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.15);
+            background: #ffffff;
+        }
+
+        .btn {
+            grid-column: span 2;
+            padding: 14px;
+            background: linear-gradient(135deg, #007bff, #ff4d4d);
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.25);
+        }
+
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .score-table th, .score-table td {
+            padding: 15px;
+            text-align: left;
+            color: #333333;
+            font-size: 1rem;
+        }
+
+        .score-table th {
+            background: linear-gradient(135deg, #007bff, #ff4d4d);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .score-table td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .score-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .score-table .highlight {
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        @keyframes fadeInCard {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                grid-column: span 1;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .score-table th, .score-table td {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            input[type="number"] {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 1rem;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🔍 Enter Customer Data</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="number" name="Cashback_Received" placeholder="Cashback Received" required step="any">
+                <input type="number" name="Min_Transaction_Value" placeholder="Min Transaction Value" required step="any">
+                <input type="number" name="Issue_Resolution_Time" placeholder="Issue Resolution Time" required step="any">
+                <input type="number" name="Avg_Transaction_Value" placeholder="Avg Transaction Value" required step="any">
+                <input type="number" name="Max_Transaction_Value" placeholder="Max Transaction Value" required step="any">
+                <input type="number" name="Last_Transaction_Days_Ago" placeholder="Last Transaction Days Ago" required step="any">
+                <input type="number" name="Total_Spent" placeholder="Total Spent" required step="any">
+                <input type="number" name="Loyalty_Points_Earned" placeholder="Loyalty Points Earned" required step="any">
+                <button type="submit" class="btn">Predict Score</button>
+            </form>
+
+            {% if score %}
+                <table class="score-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cashback Received</td>
+                            <td>{{ request.POST.Cashback_Received }}</td>
+                        </tr>
+                        <tr>
+                            <td>Min Transaction Value</td>
+                            <td>{{ request.POST.Min_Transaction_Value }}</td>
+                        </tr>
+                        <tr>
+                            <td>Issue Resolution Time</td>
+                            <td>{{ request.POST.Issue_Resolution_Time }}</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Transaction Value</td>
+                            <td>{{ request.POST.Avg_Transaction_Value }}</td>
+                        </tr>
+                        <tr>
+                            <td>Max Transaction Value</td>
+                            <td>{{ request.POST.Max_Transaction_Value }}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Transaction Days Ago</td>
+                            <td>{{ request.POST.Last_Transaction_Days_Ago }}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Spent</td>
+                            <td>{{ request.POST.Total_Spent }}</td>
+                        </tr>
+                        <tr>
+                            <td>Loyalty Points Earned</td>
+                            <td>{{ request.POST.Loyalty_Points_Earned }}</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight">Predicted Satisfaction Score</td>
+                            <td class="highlight">{{ score|floatformat:2 }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}
